@@ -3,56 +3,67 @@ using System.Collections;
 
 public class Player : MonoBehaviour 
 {
-    //input commands
-    KeyCode up;
-    KeyCode down;
-    KeyCode left;
-    KeyCode right;
-
-    //positional data
-    public float Friction = 0.5f;
-    Rigidbody physicsBody;
+	//Physics Data
+    protected float friction;
+	protected float speed;
+	protected Rigidbody physicsBody;
 
 	// Use this for initialization
-    void Start()
+    public void Start()
     {
         physicsBody = GetComponent<Rigidbody>();
+
+		friction = 0.5f;
+		speed = 300f;
     }
 
 	// Update is called once per frame
-    void Update()
+    public void Update()
     {
 
     }
     
-    void FixedUpdate() 
+	public void FixedUpdate() 
     {
-        physicsBody.velocity = new Vector3(physicsBody.velocity.x * Friction, physicsBody.velocity.y, physicsBody.velocity.z * Friction);
+		//Apply Friction
+		physicsBody.velocity = new Vector3(physicsBody.velocity.x * friction, physicsBody.velocity.y, physicsBody.velocity.z * friction);
 
-        Vector3 velocity = physicsBody.velocity;
+		//Do the player Movement
+		DoMovement (speed);
 
-	    //input checks
-        if (Input.GetKey(KeyCode.W) == true && velocity.z < 1)
-        {
-            physicsBody.velocity += Vector3.forward;
-            //Debug.Log("UP");
-        }
-        if (Input.GetKey(KeyCode.S) == true && velocity.z > -1)
-        {
-            physicsBody.velocity += Vector3.back;
-            //Debug.Log("DOWN");
-        }
-        if (Input.GetKey(KeyCode.A) == true && velocity.x > -1)
-        {
-            physicsBody.velocity += Vector3.left;
-            //Debug.Log("LEFT");
-        }
-        if (Input.GetKey(KeyCode.D) == true && velocity.x < 1)
-        {
-            physicsBody.velocity += Vector3.right;
-           //Debug.Log("RIGHT");
-        }
+		//Temp Test for knockback
+		if (Input.GetKeyDown (KeyCode.Space) == true) 
+		{
+			physicsBody.velocity += new Vector3(200, 0, 0);
+			Debug.Log("Knocked Back");
+		}
+	}
 
-        
+	public void DoMovement(float _speed)
+	{
+		float dt = Time.deltaTime;
+		Vector3 currentVel = physicsBody.velocity;
+
+		//input checks
+		if (Input.GetKey(KeyCode.W) == true && currentVel.z < speed)
+		{
+			physicsBody.velocity += Vector3.forward * _speed * dt;
+			Debug.Log("UP");
+		}
+		if (Input.GetKey(KeyCode.S) == true && currentVel.z > -speed)
+		{
+			physicsBody.velocity += Vector3.back * _speed * dt;
+			Debug.Log("DOWN");
+		}
+		if (Input.GetKey(KeyCode.A) == true && currentVel.x > -speed)
+		{
+			physicsBody.velocity += Vector3.left * _speed * dt;
+			Debug.Log("LEFT");
+		}
+		if (Input.GetKey(KeyCode.D) == true && currentVel.x < speed)
+		{
+			physicsBody.velocity += Vector3.right * _speed * dt;
+			Debug.Log("RIGHT");
+		}
 	}
 }
