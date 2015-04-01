@@ -44,26 +44,28 @@ public class Player : MonoBehaviour
 		float dt = Time.deltaTime;
 		Vector3 currentVel = physicsBody.velocity;
 
-		//input checks
-		if (Input.GetKey(KeyCode.W) == true && currentVel.z < speed)
+		float horizontal = Input.GetAxis ("Horizontal");
+		float vertical = Input.GetAxis ("Vertical");
+
+		if (vertical > 0 == true && currentVel.z < speed)
 		{
 			physicsBody.velocity += Vector3.forward * _speed * dt;
-			Debug.Log("UP");
+			//Debug.Log("UP");
 		}
-		if (Input.GetKey(KeyCode.S) == true && currentVel.z > -speed)
+		if (vertical < 0 && currentVel.z > -speed)
 		{
 			physicsBody.velocity += Vector3.back * _speed * dt;
-			Debug.Log("DOWN");
+			//Debug.Log("DOWN");
 		}
-		if (Input.GetKey(KeyCode.A) == true && currentVel.x > -speed)
+		if (horizontal < 0 && currentVel.x > -speed)
 		{
 			physicsBody.velocity += Vector3.left * _speed * dt;
-			Debug.Log("LEFT");
+			//Debug.Log("LEFT");
 		}
-		if (Input.GetKey(KeyCode.D) == true && currentVel.x < speed)
+		if (horizontal > 0 && currentVel.x < speed)
 		{
 			physicsBody.velocity += Vector3.right * _speed * dt;
-			Debug.Log("RIGHT");
+			//Debug.Log("RIGHT");
 		}
 	}
 }
